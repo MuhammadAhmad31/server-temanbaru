@@ -5,6 +5,7 @@ import { logger } from 'hono/logger';
 import { AppContext } from './types/app.type';
 import { appMiddleware } from './middleware/app';
 import { users } from './routes/user.route';
+import { auth } from './routes/auth.route';
 import { ApiResponse } from './types/responseApi.type';
 
 const app = new Hono<{
@@ -29,6 +30,7 @@ app.get('/', (c: AppContext) => {
 });
 
 app.route('/api/users', users);
+app.route('/api/auth', auth);
 
 app.notFound((c) => {
   const response: ApiResponse = {

@@ -10,7 +10,7 @@ export class UserValidationHelper {
     const errors: ErrorDetail[] = [];
 
     // Validate name
-     if (!body.name || typeof body.name !== 'string' || body.name.trim().length === 0) {
+     if (!body.name || typeof body.name !== 'string' || body.name.trim().length === 0 || body.password.trim().length === 0) {
       errors.push({
         field: 'name',
         message: 'Name is required and must be a non-empty string',

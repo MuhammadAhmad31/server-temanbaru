@@ -1,5 +1,6 @@
 import { D1Database } from '@cloudflare/workers-types';
 import { User, CreateUserRequest, UpdateUserRequest } from '../types/user.type';
+import { hash } from '../utils/hash';
 
 export class UserModel {
   private db: D1Database;
@@ -48,7 +49,7 @@ export class UserModel {
 
   async create(userData: CreateUserRequest): Promise<User> {
     try {
-      const { name, email } = userData;
+      const { name, email, password } = userData;
       
       const existingUser = await this.findByEmail(email);
       if (existingUser) {
@@ -56,15 +57,16 @@ export class UserModel {
       }
 
       const result = await this.db
-        .prepare('INSERT INTO users (name, email) VALUES (?, ?) RETURNING *')
-        .bind(name, email)
+        .prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?) RETURNING *')
+        .bind(name, email, hash(password))
         .first<User>();
       
       if (!result) {
         throw new Error('Failed to create user');
       }
       
-      return result;
+      const { password: _, ...safeUser } = result;
+      return safeUser;
     } catch (error) {
       console.error('UserModel.create error:', error);
       if (error instanceof Error) {
@@ -76,13 +78,11 @@ export class UserModel {
 
   async update(id: number, userData: UpdateUserRequest): Promise<User | null> {
     try {
-      // First check if user exists
       const existingUser = await this.findById(id);
       if (!existingUser) {
         return null;
       }
 
-      // Check email uniqueness if email is being updated
       if (userData.email && userData.email !== existingUser.email) {
         const emailExists = await this.findByEmail(userData.email);
         if (emailExists) {
