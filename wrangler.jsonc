@@ -37,21 +37,6 @@
       "database_id": "80187589-0ef5-4212-b710-7c999f59b29f"
     }
   ],
-  "queues": {
-    "producers": [
-      {
-        "queue": "ADOPTION_QUEUE",
-        "binding": "adoption-queue",
-      }
-    ],
-    "consumers": [
-      {
-        "queue": "adoption-queue",
-        // "max_batch_size": 10,
-        // "max_batch_timeout": 5
-      }
-    ]
-  }
   // "ai": {
   //   "binding": "AI"
   // },
