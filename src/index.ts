@@ -6,7 +6,9 @@ import { AppContext } from './types/app.type';
 import { appMiddleware } from './middleware/app';
 import { users } from './routes/user.route';
 import { auth } from './routes/auth.route';
+import { pets } from './routes/pet.route';
 import { ApiResponse } from './types/responseApi.type';
+import { adoption } from './routes/adoption.routes';
 
 const app = new Hono<{
   Bindings: AppContext['env'];
@@ -31,6 +33,8 @@ app.get('/', (c: AppContext) => {
 
 app.route('/api/users', users);
 app.route('/api/auth', auth);
+app.route('/api/pets', pets);
+app.route('/api/adoption', adoption);
 
 app.notFound((c) => {
   const response: ApiResponse = {

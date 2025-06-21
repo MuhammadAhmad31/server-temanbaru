@@ -6,30 +6,37 @@ import { Controllers } from "../types/app.type";
 import { AuthModel } from "../models/auth.model";
 import { AuthService } from "../service/auth.service";
 import { AuthController } from "../controllers/auth.controller";
+import { PetController } from "../controllers/pet.controller";
+import { PetService } from "../service/pet.service";
+import { Env } from "../types/db.type";
+import { AdoptionController } from "../controllers/adoption.controller";
+import { AdoptionService } from "../service/adoption.service";
+import { AdoptionModel } from "../models/adoption.model";
+
 
 export class AppFactory {
   private static controllers: Controllers | null = null;
-  
-  static getControllers(db: D1Database): Controllers {
+
+  static getControllers(db: D1Database, env: Env): Controllers {
     if (!this.controllers) {
+      const { PETFINDER_CLIENT_ID, PETFINDER_CLIENT_SECRET } = env;
+
       // Models
       const userModel = new UserModel(db);
       const authModel = new AuthModel(db);
-      // const productModel = new ProductModel(db);
-      // const orderModel = new OrderModel(db);
+      const adoptionModel = new AdoptionModel(db);
 
       // Services
       const userService = new UserService(userModel);
       const authService = new AuthService(authModel);
-      // const productService = new ProductService(productModel);
-      // const orderService = new OrderService(orderModel);
+      const petService = new PetService(PETFINDER_CLIENT_ID, PETFINDER_CLIENT_SECRET);
+      const adoptionService = new AdoptionService(petService, adoptionModel);
 
-      // Controllers - cached globally
       this.controllers = {
         user: new UserController(userService),
         auth: new AuthController(authService),
-        // product: new ProductController(productService),
-        // order: new OrderController(orderService)
+        pet: new PetController(petService),
+        adoption: new AdoptionController(adoptionService)
       };
     }
 

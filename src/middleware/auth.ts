@@ -40,6 +40,10 @@ export const authMiddlewareUser: MiddlewareHandler = async (c, next) => {
     const secret = (c.env as Env).JWT_SECRET;
     const decoded = await verify(token, secret);
 
+    if (decoded.email === 'admin@mail.com') {
+      return c.json({ success: false, error: 'Forbidden: User only' }, 403);
+    }
+
     c.set('jwtPayload', decoded as { email: string });
     await next();
   } catch (error) {
