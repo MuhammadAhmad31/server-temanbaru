@@ -1,0 +1,14 @@
+-- Migration: create_users_table
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_users_updated_at 
+AFTER UPDATE ON users
+BEGIN
+  UPDATE users SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
+END;
