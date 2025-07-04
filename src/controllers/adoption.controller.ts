@@ -40,7 +40,7 @@ export class AdoptionController {
         adoption,
         "Adoption request processed successfully"
       );
-      return c.json(response, 200);
+      return c.json(response, 201);
     } catch (err) {
       console.error("postAdoptionRequest error:", err);
       return c.json({ code: 500, message: "Internal Server Error" }, 500);
