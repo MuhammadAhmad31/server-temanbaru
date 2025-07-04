@@ -1,12 +1,12 @@
 import { AdoptionModel } from "../models/adoption.model";
-import { Animal } from "../types/adoption.type";
+import { AdoptionData, Animal } from "../types/adoption.type";
 import { PetService } from "./pet.service";
 
 export class AdoptionService {
   constructor(private petService: PetService, private adoptionModel: AdoptionModel) {}
 
   async processAdoption(animalId: string, userEmail: string) {
-    const animalData = await this.petService.getPetById(animalId);
+    const animalData: AdoptionData = await this.petService.getPetById(animalId);
 
     const dataToSave: Animal = {
       id: animalData.animal.id,
@@ -16,7 +16,7 @@ export class AdoptionService {
       gender: animalData.animal.gender,
       status: animalData.animal.status,
       user_email: userEmail,
-      image: animalData.animal.primary_photo_cropped.small || "",
+      image: animalData.animal.primary_photo_cropped?.small || "",
     };
 
     return await this.adoptionModel.create(dataToSave);

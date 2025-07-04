@@ -8,6 +8,11 @@ export interface Animal {
     type: string;
     status: string;
     image: string;
+    primary_photo_cropped?: {
+        small?: string;
+        medium?: string;
+        large?: string;
+    };
 }
 
 export interface AdoptionData {
