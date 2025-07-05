@@ -31,3 +31,8 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+
+# wrangler
+wrangler.toml
+wrangler.lock
+wrangler.jsonc
